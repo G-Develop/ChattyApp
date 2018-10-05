@@ -27,12 +27,15 @@ handle_SelectUser = e => {
 
 handle_eEnter = e => {
   console.log("this is the handleEnter", e)
-  if (e.keyCode== 13) {
+  if (e.keyCode== 13) {      // keycode 13 is the enter key
     console.log("enter detected")
     e.preventDefault();
-    this.props.addText(this.state.text);
-    e.target.value = '';
-    this.setState({messages:[...this.state.messages,]})
+    console.log("text area contents", e.target.value)
+   // const newmessage = {username:this.props.user} 
+  //  const messages = this.state.messages.concat(newmessage);
+  //  this.state.messages.concat(newmessage)
+  //  e.target.value = '';
+  //  this.setstate({messages:[...this.state.messages,]})
   }
 }
 
@@ -41,7 +44,7 @@ handle_eEnter = e => {
   render() {
     return (
     <footer className="chatbar">
-      <input name="user" onChange = {this.handle_SelectUser}className="chatbar-username" defaultValue={this.props.currentUser} placeholder="Your Name (Optional)"/>
+      <input name="user" onChange = {this.handle_SelectUser} value = {this.state.value} className="chatbar-username" defaultValue={this.props.currentUser} placeholder="Your Name (Optional)"/>
       <input name="message" onKeyDown={this.handle_eEnter} className="chatbar-message" placeholder="Type a message and hit ENTER"/>
     </footer>)
   }
