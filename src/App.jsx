@@ -35,6 +35,10 @@ class App extends Component {
   }, 3000);
 }
 
+onSend() {
+  //take object add to messages. with and id.  
+}
+
   render() {
     return (
       <div>
