@@ -9,7 +9,6 @@ class ChatBar extends Component {
       message: ""
     }
   }
-  
 
   handle_onChange = (e) => {
     console.log(e.target.name)
@@ -29,7 +28,6 @@ class ChatBar extends Component {
       console.log(this.state)
       this.setState({user:this.state.user, message:this.state.message})
       console.log("this is the new state ==>", this.state)
-      this.props.username(this.state.user);
 
       // console.log("text area contents", e.target.value) e.target.value will give the value of the event target
       const textAreaContents = e.target.value

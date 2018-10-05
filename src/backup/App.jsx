@@ -35,10 +35,9 @@ class App extends Component {
   }, 3000);
 }
 
-  appendUsername = (username) =>  {
-    this.setState({currentUser: {name: username}}, () => {console.log(this.state.currentUser)})
-  }
-
+//onSend() {
+  //take object add to messages. with and id.
+//}
 
   render() {
     return (
@@ -47,11 +46,7 @@ class App extends Component {
           <a href="/" className="navbar-brand">Chatty</a>
         </nav>
         <MessageList messages={this.state.messages} />
-      ========CHAT BAR  =========== 
-      <ChatBar
-           currentUser = {this.state.currentUser.name} 
-           username =  {this.appendUsername}         
-        />
+        <ChatBar currentUser = {this.state.currentUser.name}/>
       </div>
     )
   }
