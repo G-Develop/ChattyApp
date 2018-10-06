@@ -23,6 +23,9 @@ class App extends Component {
   }
 
   componentDidMount() {
+    const ws = new WebSocket('ws://localhost:3001')
+//    window._ws=ws // this alows the browser to access the ws variable. 
+    this.WebSocket=ws;
 
 /*  setTimeout(() => {
     console.log("Simulating incoming message");
@@ -35,11 +38,12 @@ class App extends Component {
   }, 3000);*/
 }
 
-/*  appendUsername = (username) =>  {
+/*  changeUsername = (username) =>  {
     this.setState({currentUser: {name: username}}, () => {console.log(this.state.currentUser)})
   }*/
 
   appendMessage = (message) => {
+    this.WebSocket.send(message)
     const oldstate = {...this.state};
     this.setState({
       currentUser: oldstate.currentUser,
@@ -59,7 +63,7 @@ class App extends Component {
       ========CHAT BAR  ===========
       <ChatBar
            currentUser = {this.state.currentUser.name}
-           user =  {this.appendUsername}
+           user =  {this.changeUsername}
            message = {this.appendMessage}
         />
       </div>
