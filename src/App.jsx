@@ -24,8 +24,10 @@ class App extends Component {
 
   componentDidMount() {
     const ws = new WebSocket('ws://localhost:3001')
+    console.log("connected to server")
 //    window._ws=ws // this alows the browser to access the ws variable. 
     this.WebSocket=ws;
+
 
 /*  setTimeout(() => {
     console.log("Simulating incoming message");
@@ -43,7 +45,11 @@ class App extends Component {
   }*/
 
   appendMessage = (message) => {
-    this.WebSocket.send(message)
+    const messageObj = { 
+      message:message,
+      currentUser:this.state.currentUser.name
+    } 
+    this.WebSocket.send(JSON.stringify( messageObj ))
     const oldstate = {...this.state};
     this.setState({
       currentUser: oldstate.currentUser,

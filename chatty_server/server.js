@@ -51,7 +51,10 @@ wsServer.broadcast = function(data) {
 // Handles incoming messages.
 // Stores the current state of the textbox and broadcasts it
 function handleMessage(message) {
-  console.log(message);
+  console.log("the unparesed message : ", message);
+  let parsedJson = JSON.parse(message);
+  console.log("the paresed Message ", parsedJson);
+  console.log(`User ${parsedJson["currentUser"]} said ${parsedJson["message"]}`)
   currentContents = message;
   wsServer.broadcast(message);
 }
