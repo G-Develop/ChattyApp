@@ -30,9 +30,9 @@ class App extends Component {
   }
 
 
-/*  changeUsername = (username) =>  {
+  changeUsername = (username) =>  {
     this.setState({currentUser: {name: username}}, () => {console.log(this.state.currentUser)})
-  }*/
+  }
 
   //this appends the message to the state and sends it to the server
   appendMessage = (message) => {
@@ -60,8 +60,8 @@ class App extends Component {
       {/* ========CHAT BAR  =========== */}
       <ChatBar
            currentUser = {this.state.currentUser.name}
-           user =  {this.changeUsername}
-           message = {this.appendMessage}
+           changeUsername =  {this.changeUsername}
+           appendMessage = {this.appendMessage}
       />
       </div>
     )
