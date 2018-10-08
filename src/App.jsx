@@ -24,13 +24,47 @@ class App extends Component {
     };
    
     this.socket.onmessage = (e) => {
-      console.log(e.data);
-      const broadcastedMessage = JSON.parse(e.data); 
-      this.setState({
-        messages:this.state.messages.concat(broadcastedMessage)
-    });
-   }
+      console.log(e);
+      // The socket event data is encoded as a JSON string.  
+      // This line turns it into an object
+      const data = JSON.parse(e.data);
+      console.log(data);
+      switch(data.type) {
+        case "incomingMessage":
+          // handle incoming message
+          console.log(data);
+          const broadcastedMessage = data;
+          this.setState({
+            messages:this.state.messages.concat(broadcastedMessage)
+          });
+          break;
+        case "incomingNotification":
+          //handle incoming notification 
+          console.log(data);
+          const broadcastedNotification = data;
+          break;
+        default:
+          // show an error in the console if the message type is unknown
+          throw new Error("Unknown event type " + data.type);
+      }
+   };
   }
+
+
+// this.socket.onmessage = (e) => {
+ //     console.log(e.data);
+  //    const broadcastedMessage = JSON.parse(e.data); 
+   //   this.setState({
+    //    messages:this.state.messages.concat(broadcastedMessage)
+   // });
+   // }
+
+
+
+
+
+
+
 
 
   changeUsername = (username) =>  {
@@ -40,6 +74,7 @@ class App extends Component {
   //this appends the message to the state and sends it to the server
   appendMessage = (message) => {
     const messageObj = { 
+      type:"postMessage",
       content:message,
       userName :this.state.currentUser.name
     } 

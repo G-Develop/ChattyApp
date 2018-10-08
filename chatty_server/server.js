@@ -43,7 +43,9 @@ wss.on('connection', (ws) => {
 function handleMessage(message ) {
   let parsedJson = JSON.parse(message);
    parsedJson.id = id
+   parsedJson.type = 'incomingMessage' //not sure if this should be a string **** 
    console.log(`User ${parsedJson.userName} said ${parsedJson.content}`)
+   console.log("here ", parsedJson)
   wss.broadcast(JSON.stringify(parsedJson))
 }
 
