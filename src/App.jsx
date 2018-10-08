@@ -16,10 +16,13 @@ class App extends Component {
   componentDidMount() {
     console.log("<App /> has mounted");
     this.socket  = new WebSocket('ws://localhost:3001')
-    console.log("connected to server")
     /*window._ws=ws  this alows the browser to access the ws variable.*/ 
     // this.WebSocket=ws;
     
+    this.socket.onopen = (e) => {
+      console.log("Connected to the server")
+    };
+   
     this.socket.onmessage = (e) => {
       console.log(e.data);
       const broadcastedMessage = JSON.parse(e.data); 
@@ -53,11 +56,18 @@ class App extends Component {
     console.log('app', this.state)
     return (
       <div>
+      
+      {/* ===NAV BAR COMPONENT=== */}
         <nav className="navbar">
           <a href="/" className="navbar-brand">Chatty</a>
         </nav>
+     
+      
+      {/* ===MESSAGE LIST COMPONENT== */}
         <MessageList messages={this.state.messages} />
-      {/* ========CHAT BAR  =========== */}
+     
+      
+      {/* ===CHAT BAR COMPONENT== */}
       <ChatBar
            currentUser = {this.state.currentUser.name}
            changeUsername =  {this.changeUsername}
