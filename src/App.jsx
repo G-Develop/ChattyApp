@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import ChatBar from "./ChatBar.jsx";
 import MessageList from "./MessageList.jsx";
-
+import NavBar from "./NavBar.jsx"
 
 class App extends Component {
   constructor(props) {
@@ -33,16 +33,13 @@ class App extends Component {
             messages:this.state.messages.concat(data)
           });
       //update state of  activeConnections
-      if (data[0].activeConnections) {
+      if (data.activeConnections) {
         this.setState({
-          activeConnections:data[0].activeConnections 
+          activeConnections:data.activeConnections 
         });
       }
     };
   }
-        
-      
-      
 
 // this.socket.onmessage = (e) => {
  //     console.log(e.data);
@@ -67,7 +64,7 @@ class App extends Component {
   appendMessage = (message) => {
     const messageObj = { 
       type:"postMessage",
-      content:undefined,
+      content:message ,
       userName :this.state.currentUser
     } 
     this.socket.send(JSON.stringify( messageObj ))
@@ -79,12 +76,11 @@ class App extends Component {
     return (
       <div>
       
-      {/* ===NAV BAR ELEMENT=== */}
-        <nav className="navbar">
-          <a href="/" className="navbar-brand">Chatty</a>
-          <span>{this.state.activeConnections} </span> 
-        </nav>
-     
+      
+      {/* ===NAV BAR COMPONENT== */}
+        <NavBar
+          activeConnection = {this.state}
+        />
       
       {/* ===MESSAGE LIST COMPONENT== */}
         <MessageList messages={this.state.messages} />
@@ -92,9 +88,9 @@ class App extends Component {
       
       {/* ===CHAT BAR COMPONENT== */}
       <ChatBar
-           currentUser = {this.state.currentUser}
-           changeUsername =  {this.changeUsername}
-           appendMessage = {this.appendMessage}
+        currentUser = {this.state.currentUser}
+        changeUsername =  {this.changeUsername}
+        appendMessage = {this.appendMessage}
       />
       </div>
     )

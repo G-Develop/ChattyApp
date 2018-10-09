@@ -49,7 +49,20 @@ function handleMessage(message ) {
   wss.broadcast(JSON.stringify(parsedJson))
 }
 
- 
+
+// Handles incoming notifications  gives them an id   
+function handleNameChange(message) {
+  let parsedJson = JSON.parse(message);
+   parsedJson.id = id
+   parsedJson.type = 'incomingNotification' //not sure if this should be a string **** 
+   console.log(`User ${parsedJson.userName} said ${parsedJson.content}`)
+   console.log("here ", parsedJson)
+  wss.broadcast(JSON.stringify(parsedJson))
+}
+
+
+
+
 // Broadcast - Goes through each client and sends message data
 wss.broadcast = function broadcast(data) {
   wss.clients.forEach(function each(client) {
@@ -59,34 +72,6 @@ wss.broadcast = function broadcast(data) {
     }
   });
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
