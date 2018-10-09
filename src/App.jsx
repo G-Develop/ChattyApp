@@ -7,9 +7,9 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentUser: {name: "Bob"}, // optional. if currentUser is not defined, it means the user is Anonymous
-      messages: []
-       
+      currentUser:'Anonymous', 
+      messages: [],
+      activeConnections:0
     };
   }
 
@@ -23,33 +23,26 @@ class App extends Component {
       console.log("Connected to the server")
     };
    
+    
     this.socket.onmessage = (e) => {
       console.log(e);
       // The socket event data is encoded as a JSON string.  
       // This line turns it into an object
       const data = JSON.parse(e.data);
-      console.log(data);
-      switch(data.type) {
-        case "incomingMessage":
-          // handle incoming message
-          console.log(data);
-          const broadcastedMessage = data;
           this.setState({
-            messages:this.state.messages.concat(broadcastedMessage)
+            messages:this.state.messages.concat(data)
           });
-          break;
-        case "incomingNotification":
-          //handle incoming notification 
-          console.log(data);
-          const broadcastedNotification = data;
-          break;
-        default:
-          // show an error in the console if the message type is unknown
-          throw new Error("Unknown event type " + data.type);
+      //update state of  activeConnections
+      if (data[0].activeConnections) {
+        this.setState({
+          activeConnections:data[0].activeConnections 
+        });
       }
-   };
+    };
   }
-
+        
+      
+      
 
 // this.socket.onmessage = (e) => {
  //     console.log(e.data);
@@ -61,29 +54,23 @@ class App extends Component {
 
 
 
-
-
-
-
-
-
   changeUsername = (username) =>  {
-    this.setState({currentUser: {name: username}}, () => {console.log(this.state.currentUser)})
+    const notificationObj = {
+      type: "postNotification",
+      content: `${this.state.currentUser} changed their name to ${username}`
+    }
+    this.setState({currentUser: {username}}, () => {console.log(this.state.currentUser)})
+    this.socket.send(JSON.stringify([ notificationObj ]));
   }
 
   //this appends the message to the state and sends it to the server
   appendMessage = (message) => {
     const messageObj = { 
       type:"postMessage",
-      content:message,
-      userName :this.state.currentUser.name
+      content:undefined,
+      userName :this.state.currentUser
     } 
     this.socket.send(JSON.stringify( messageObj ))
-    //const oldstate = {...this.state};
-    //this.setState({
-     // currentUser: oldstate.currentUser,
-      //messages:oldstate.messages.concat({username:oldstate.currentUser.name,content:message})
-    //})
   }   
 
 
@@ -92,9 +79,10 @@ class App extends Component {
     return (
       <div>
       
-      {/* ===NAV BAR COMPONENT=== */}
+      {/* ===NAV BAR ELEMENT=== */}
         <nav className="navbar">
           <a href="/" className="navbar-brand">Chatty</a>
+          <span>{this.state.activeConnections} </span> 
         </nav>
      
       
@@ -104,7 +92,7 @@ class App extends Component {
       
       {/* ===CHAT BAR COMPONENT== */}
       <ChatBar
-           currentUser = {this.state.currentUser.name}
+           currentUser = {this.state.currentUser}
            changeUsername =  {this.changeUsername}
            appendMessage = {this.appendMessage}
       />
