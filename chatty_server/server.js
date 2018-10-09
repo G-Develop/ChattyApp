@@ -22,14 +22,17 @@ const id = uuid()
 // Set up a callback that will run when a client connects to the server When a client connects they are assigned a socket, represented by the `ws` argument in the callback.
 wss.on('connection', (ws) => {
   console.log('Client connected');
-  //handleNewUser();
+  handleConnectedUsers();
 
   // Handle messages
   ws.on('message', message => ( (handleMessage(message))));
 
   // Set up a callback for when a client closes the socket.
   // This usually means they closed their browser tab.
-  ws.on('close', () => console.log('Client disconnected'));
+  ws.on('close', () => {
+    console.log('Client disconnected');
+    handleConnectedUsers();
+  });
 });
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -50,14 +53,15 @@ function handleMessage(message ) {
 }
 
 
-// Handles new user 
-function handleNewUser() {
+// Handles connected users
+function handleConnectedUsers() {
   const messageObjNotification = {
     id: id, 
     type: 'connectedUsers',
     userCount: wss.clients.size, 
   }
   wss.broadcast(JSON.stringify(messageObjNotification))
+  console.log("userCount: ============>",  messageObjNotification.userCount)
 }
 
 
@@ -67,10 +71,10 @@ function handleNewUser() {
 // Handles incoming notifications  gives them an id   
 function handleNameChange(message) {
   let parsedJson = JSON.parse(message);
-   parsedJson.id = id
-   parsedJson.type = 'incomingNotification' //not sure if this should be a string **** 
-   console.log(`User ${parsedJson.userName} said ${parsedJson.content}`)
-   console.log("here ", parsedJson)
+  parsedJson.id = id
+  parsedJson.type = 'incomingNotification' //not sure if this should be a string **** 
+  console.log(`User ${parsedJson.userName} said ${parsedJson.content}`)
+  console.log("here ", parsedJson)
   wss.broadcast(JSON.stringify(parsedJson))
 }
 

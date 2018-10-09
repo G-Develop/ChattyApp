@@ -75,23 +75,18 @@ class App extends Component {
     console.log('app', this.state)
     return (
       <div>
-      
-      
-      {/* ===NAV BAR COMPONENT== */}
+        {/* ===NAV BAR COMPONENT== */}
         <NavBar
           activeConnections={this.state.activeConnections}
         />
-      
-      {/* ===MESSAGE LIST COMPONENT== */}
+        {/* ===MESSAGE LIST COMPONENT== */}
         <MessageList messages={this.state.messages} />
-     
-      
-      {/* ===CHAT BAR COMPONENT== */}
-      <ChatBar
-        currentUser={this.state.currentUser}
-        changeUsername={this.changeUsername}
-        appendMessage={this.appendMessage}
-      />
+        {/* ===CHAT BAR COMPONENT== */}
+        <ChatBar
+          currentUser={this.state.currentUser}
+          changeUsername={this.changeUsername}
+          appendMessage={this.appendMessage}
+        />
       </div>
     )
   }
