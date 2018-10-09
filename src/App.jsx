@@ -56,7 +56,7 @@ class App extends Component {
       type: "postNotification",
       content: `${this.state.currentUser} changed their name to ${username}`
     }
-    this.setState({currentUser: {username}}, () => {console.log(this.state.currentUser)})
+    this.setState({currentUser: username}, () => {console.log(this.state.currentUser)})
     this.socket.send(JSON.stringify([ notificationObj ]));
   }
 
@@ -67,7 +67,7 @@ class App extends Component {
       content:message ,
       userName :this.state.currentUser
     } 
-    this.socket.send(JSON.stringify( messageObj ))
+    this.socket.send(JSON.stringify( [ messageObj ]))
   }   
 
 
@@ -79,7 +79,7 @@ class App extends Component {
       
       {/* ===NAV BAR COMPONENT== */}
         <NavBar
-          activeConnection = {this.state}
+          activeConnections={this.state.activeConnections}
         />
       
       {/* ===MESSAGE LIST COMPONENT== */}
@@ -88,9 +88,9 @@ class App extends Component {
       
       {/* ===CHAT BAR COMPONENT== */}
       <ChatBar
-        currentUser = {this.state.currentUser}
-        changeUsername =  {this.changeUsername}
-        appendMessage = {this.appendMessage}
+        currentUser={this.state.currentUser}
+        changeUsername={this.changeUsername}
+        appendMessage={this.appendMessage}
       />
       </div>
     )

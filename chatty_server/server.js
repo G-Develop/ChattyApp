@@ -22,10 +22,10 @@ const id = uuid()
 // Set up a callback that will run when a client connects to the server When a client connects they are assigned a socket, represented by the `ws` argument in the callback.
 wss.on('connection', (ws) => {
   console.log('Client connected');
+  //handleNewUser();
 
   // Handle messages
   ws.on('message', message => ( (handleMessage(message))));
-  
 
   // Set up a callback for when a client closes the socket.
   // This usually means they closed their browser tab.
@@ -46,8 +46,22 @@ function handleMessage(message ) {
    parsedJson.type = 'incomingMessage' //not sure if this should be a string **** 
    console.log(`User ${parsedJson.userName} said ${parsedJson.content}`)
    console.log("here ", parsedJson)
-  wss.broadcast(JSON.stringify(parsedJson))
+   wss.broadcast(JSON.stringify(parsedJson))
 }
+
+
+// Handles new user 
+function handleNewUser() {
+  const messageObjNotification = {
+    id: id, 
+    type: 'connectedUsers',
+    userCount: wss.clients.size, 
+  }
+  wss.broadcast(JSON.stringify(messageObjNotification))
+}
+
+
+
 
 
 // Handles incoming notifications  gives them an id   
