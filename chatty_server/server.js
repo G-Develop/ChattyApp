@@ -25,7 +25,12 @@ wss.on('connection', (ws) => {
   handleConnectedUsers();
 
   // Handle messages
-  ws.on('message', message => ( (handleMessage(message))));
+  //ws.on('message', message => ( (handleMessage(message))));
+
+  //Handle incoming message from App
+  ws.on('message', (message) => {
+    handleMessage(message)
+  });
 
   // Set up a callback for when a client closes the socket.
   // This usually means they closed their browser tab.
@@ -45,11 +50,11 @@ wss.on('connection', (ws) => {
 // Handles incoming messages gives them an id   
 function handleMessage(message ) {
   let parsedJson = JSON.parse(message);
-   parsedJson.id = id
-   parsedJson.type = 'incomingMessage' //not sure if this should be a string **** 
-   console.log(`User ${parsedJson.userName} said ${parsedJson.content}`)
-   console.log("here ", parsedJson)
-   wss.broadcast(JSON.stringify(parsedJson))
+  parsedJson.id = id
+  parsedJson.type = 'incomingMessage' //not sure if this should be a string **** 
+  console.log(`User ${parsedJson.userName} said ${parsedJson.content}`)
+  console.log("here ", parsedJson)
+  wss.broadcast(JSON.stringify(parsedJson))
 }
 
 
@@ -64,17 +69,13 @@ function handleConnectedUsers() {
   console.log("userCount: ============>",  messageObjNotification.userCount)
 }
 
-
-
-
-
 // Handles incoming notifications  gives them an id   
 function handleNameChange(message) {
   let parsedJson = JSON.parse(message);
   parsedJson.id = id
   parsedJson.type = 'incomingNotification' //not sure if this should be a string **** 
-  console.log(`User ${parsedJson.userName} said ${parsedJson.content}`)
-  console.log("here ", parsedJson)
+  //console.log(`User ${parsedJson.userName} said ${parsedJson.content}`)
+  console.log(parsedJson)
   wss.broadcast(JSON.stringify(parsedJson))
 }
 
@@ -86,7 +87,7 @@ wss.broadcast = function broadcast(data) {
   wss.clients.forEach(function each(client) {
     if (client.readyState === WebSocket.OPEN) {
       client.send(data);
-      console.log("this is the data", data);
+      console.log("this is the data ========>", data);
     }
   });
 };

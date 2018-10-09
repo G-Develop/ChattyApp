@@ -14,7 +14,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    console.log("<App /> has mounted");
+   // console.log("<App /> has mounted");
     this.socket  = new WebSocket('ws://localhost:3001')
     /*window._ws=ws  this alows the browser to access the ws variable.*/ 
     // this.WebSocket=ws;
@@ -25,18 +25,27 @@ class App extends Component {
    
     
     this.socket.onmessage = (e) => {
-      console.log(e);
+      //console.log('this is the message ===> ', e);
       // The socket event data is encoded as a JSON string.  
       // This line turns it into an object
       const data = JSON.parse(e.data);
+      console.log('this is the data ===>', data)
+      switch(data.type) {
+        case 'incomingMessage':
           this.setState({
             messages:this.state.messages.concat(data)
           });
-      //update state of  activeConnections
-      if (data.activeConnections) {
-        this.setState({
-          activeConnections:data.activeConnections 
-        });
+          break;
+        case 'incomingNotification':
+          this.setState({currentUser: username}, () => {console.log(this.state.currentUser)})
+          break;
+        case 'connectedUsers':
+          this.setState({
+            activeConnections: data.userCount
+          });
+          break;
+        default:
+          break;
       }
     };
   }
@@ -56,8 +65,8 @@ class App extends Component {
       type: "postNotification",
       content: `${this.state.currentUser} changed their name to ${username}`
     }
-    this.setState({currentUser: username}, () => {console.log(this.state.currentUser)})
-    this.socket.send(JSON.stringify([ notificationObj ]));
+    //this.setState({currentUser: username}, () => {console.log(this.state.currentUser)})
+    this.socket.send(JSON.stringify( notificationObj ));
   }
 
   //this appends the message to the state and sends it to the server
@@ -67,7 +76,7 @@ class App extends Component {
       content:message ,
       userName :this.state.currentUser
     } 
-    this.socket.send(JSON.stringify( [ messageObj ]))
+    this.socket.send(JSON.stringify(  messageObj ))
   }   
 
 
