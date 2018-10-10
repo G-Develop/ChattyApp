@@ -6,11 +6,8 @@ const WebSocket = require('ws'); //much easier to follow documentation
 const uuid = require('uuid');
 const PORT = 3001;  // Set the port to 3001
 const server  = express()  // Create a new express server
-.use(express.static('public'))  // Make the express server serve static assets (html, javascript, css)  from the /public folder
-.listen(
-  PORT, '0.0.0.0', 'localhost',
-  () => console.log(`Listening on ${PORT}`)
-);
+.listen( PORT, '0.0.0.0', 'localhost',() => console.log(`Listening on ${PORT}`));
+
 const wss  = new SocketServer({server});  // Creates the WebSockets server and attaches it to express
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -21,9 +18,8 @@ wss.on('connection', (ws) => {
   handleConnectedUsers();
 
   // Handle messages
-  //ws.on('message', message => ( (handleMessage(message))));
 
-  //Handle incoming message from App
+  //Handle incoming message/notification from App
   ws.on('message', (message) => {
     console.log( "this is the message ===>", message)
     parsedJson = JSON.parse(message);
@@ -60,7 +56,7 @@ function handleMessage(message ) {
 }
 
 
-// Handles connected users
+// Handles connected users to send  how many users are connected
 function handleConnectedUsers() {
   const messageObjNotification = {
     id: uuid(), 
@@ -68,26 +64,20 @@ function handleConnectedUsers() {
     userCount: wss.clients.size, 
   }
   wss.broadcast(JSON.stringify(messageObjNotification))
-  console.log("userCount: ============>",  messageObjNotification.userCount)
 }
 
 // Handles incoming notifications  gives them an id   
 function handleNameChange(message) {
   message.id = uuid()
-  message.type = 'incomingNotification' //not sure if this should be a string **** 
-  //console.log(`User ${parsedJson.userName} said ${parsedJson.content}`)
+  message.type = 'incomingNotification' 
   wss.broadcast(JSON.stringify(message))
 }
-
-
-
 
 // Broadcast - Goes through each client and sends message data
 wss.broadcast = function broadcast(data) {
   wss.clients.forEach(function each(client) {
     if (client.readyState === WebSocket.OPEN) {
       client.send(data);
-      console.log("this is the data ========>", data);
     }
   });
 };

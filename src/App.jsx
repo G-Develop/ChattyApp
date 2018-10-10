@@ -7,29 +7,20 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentUser:'Anonymous', 
+      currentUser:'Anonymous',
       messages: [],
       activeConnections:0
     };
   }
 
   componentDidMount() {
-   // console.log("<App /> has mounted");
     this.socket  = new WebSocket('ws://localhost:3001')
-    /*window._ws=ws  this alows the browser to access the ws variable.*/ 
-    // this.WebSocket=ws;
-    
     this.socket.onopen = (e) => {
       console.log("Connected to the server")
     };
-   
-    
     this.socket.onmessage = (e) => {
-      //console.log('this is the message ===> ', e);
-      // The socket event data is encoded as a JSON string.  
-      // This line turns it into an object
-      const data = JSON.parse(e.data);
-      console.log('this is the data ===>', data)
+      // The socket event data is encoded as a JSON string.
+      const data = JSON.parse(e.data); // This will parse the string into an object
       switch(data.type) {
         case 'incomingMessage':
           this.setState({
@@ -38,10 +29,9 @@ class App extends Component {
           break;
         case 'incomingNotification':
           this.setState({
-            currentUser: data.userName,
+            currentUser:data.userName,
             messages:this.state.messages.concat(data)
-            
-          }, )
+          })
           break;
         case 'connectedUsers':
           this.setState({
@@ -54,16 +44,10 @@ class App extends Component {
     };
   }
 
-// this.socket.onmessage = (e) => {
- //     console.log(e.data);
-  //    const broadcastedMessage = JSON.parse(e.data); 
-   //   this.setState({
-    //    messages:this.state.messages.concat(broadcastedMessage)
-   // });
-   // }
 
+ //==================================== NOTIFICATION AND MESSAGE FUNCTIONS THAT WILL SEND THE DATA TO THE SERVER ===================================
 
-
+  //sends the notification  object to the server with the type set at postNotification  to be later caught by the server's filtering catch statement
   changeUsername = (user) =>  {
     if(this.state.currentUser !== user) {
       const notificationObj = {
@@ -72,21 +56,19 @@ class App extends Component {
         userName:user
       }
       this.socket.send(JSON.stringify(notificationObj));
-      //this.setState({ currentUser: {name: user}})
     }
   }
 
-  //this appends the message to the state and sends it to the server
+  //sends the message object to the server with the type set at postMessage to be later caught by the server's filtering catch statement
   appendMessage = (message) => {
-    const messageObj = { 
+    const messageObj = {
       type:"postMessage",
       content:message ,
       userName :this.state.currentUser
-    } 
-    
-    this.socket.send(JSON.stringify(  messageObj ))
-  }   
-
+    }
+    this.socket.send(JSON.stringify(messageObj))
+  }
+ //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
   render() {
     console.log('app', this.state)
