@@ -12,11 +12,7 @@ const server  = express()  // Create a new express server
   () => console.log(`Listening on ${PORT}`)
 );
 const wss  = new SocketServer({server});  // Creates the WebSockets server and attaches it to express
-const id = uuid()
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-
-
 
 //========================SERVER.ON ==============================
 // Set up a callback that will run when a client connects to the server When a client connects they are assigned a socket, represented by the `ws` argument in the callback.
@@ -29,7 +25,18 @@ wss.on('connection', (ws) => {
 
   //Handle incoming message from App
   ws.on('message', (message) => {
-    handleMessage(message)
+    console.log( "this is the message ===>", message)
+    parsedJson = JSON.parse(message);
+    switch (parsedJson.type) {
+      case 'postMessage':
+         handleMessage(parsedJson)
+        break; 
+      case 'postNotification':
+        handleNameChange(parsedJson)
+        break;
+      default: 
+        break;
+    }
   });
 
   // Set up a callback for when a client closes the socket.
@@ -42,26 +49,21 @@ wss.on('connection', (ws) => {
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
-
-
 //=============== FUNCTIONS ===========================
 
 
 // Handles incoming messages gives them an id   
 function handleMessage(message ) {
-  let parsedJson = JSON.parse(message);
-  parsedJson.id = id
-  parsedJson.type = 'incomingMessage' //not sure if this should be a string **** 
-  console.log(`User ${parsedJson.userName} said ${parsedJson.content}`)
-  console.log("here ", parsedJson)
-  wss.broadcast(JSON.stringify(parsedJson))
+  message.id = uuid()
+  message.type = 'incomingMessage' //not sure if this should be a string **** 
+  wss.broadcast(JSON.stringify(message))
 }
 
 
 // Handles connected users
 function handleConnectedUsers() {
   const messageObjNotification = {
-    id: id, 
+    id: uuid(), 
     type: 'connectedUsers',
     userCount: wss.clients.size, 
   }
@@ -71,12 +73,10 @@ function handleConnectedUsers() {
 
 // Handles incoming notifications  gives them an id   
 function handleNameChange(message) {
-  let parsedJson = JSON.parse(message);
-  parsedJson.id = id
-  parsedJson.type = 'incomingNotification' //not sure if this should be a string **** 
+  message.id = uuid()
+  message.type = 'incomingNotification' //not sure if this should be a string **** 
   //console.log(`User ${parsedJson.userName} said ${parsedJson.content}`)
-  console.log(parsedJson)
-  wss.broadcast(JSON.stringify(parsedJson))
+  wss.broadcast(JSON.stringify(message))
 }
 
 

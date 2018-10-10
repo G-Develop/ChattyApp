@@ -7,14 +7,14 @@ class ChatBar extends Component {
   handle_eMessageEnter = e => {
     //console.log("this is the event", e)
     if (e.keyCode == 13) { // keycode 13 is the enter key
-     // console.log("enter detected")
+      console.log("enter detected")
       e.preventDefault();
       this.props.appendMessage(e.target.value);
     }
   }
 
   handle_eNameEnter = e => {
-    //console.log("this is the event", e)
+    console.log("this is the event", e)
     if (e.keyCode == 13) { // keycode 13 is the enter key
       e.preventDefault();
       this.props.changeUsername(e.target.value);

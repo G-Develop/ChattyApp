@@ -37,7 +37,11 @@ class App extends Component {
           });
           break;
         case 'incomingNotification':
-          this.setState({currentUser: username}, () => {console.log(this.state.currentUser)})
+          this.setState({
+            currentUser: data.userName,
+            messages:this.state.messages.concat(data)
+            
+          }, )
           break;
         case 'connectedUsers':
           this.setState({
@@ -60,13 +64,16 @@ class App extends Component {
 
 
 
-  changeUsername = (username) =>  {
-    const notificationObj = {
-      type: "postNotification",
-      content: `${this.state.currentUser} changed their name to ${username}`
+  changeUsername = (user) =>  {
+    if(this.state.currentUser !== user) {
+      const notificationObj = {
+        type: "postNotification",
+        content: `${this.state.currentUser} changed their name to ${user}`,
+        userName:user
+      }
+      this.socket.send(JSON.stringify(notificationObj));
+      //this.setState({ currentUser: {name: user}})
     }
-    //this.setState({currentUser: username}, () => {console.log(this.state.currentUser)})
-    this.socket.send(JSON.stringify( notificationObj ));
   }
 
   //this appends the message to the state and sends it to the server
@@ -76,6 +83,7 @@ class App extends Component {
       content:message ,
       userName :this.state.currentUser
     } 
+    
     this.socket.send(JSON.stringify(  messageObj ))
   }   
 
