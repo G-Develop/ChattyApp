@@ -5,8 +5,8 @@ Chatty, is simple version of slack and what's app where using web sockets users 
 
 ## Final Product
 
-![“Screenshot when 2 user online”](showing active users.png)
-![“users_can_chat_in real time  and a notification is displayed when the name changes"](ShowingNameChangeAndMessage.png)
+![“Screenshot when 2 user online”](https://raw.githubusercontent.com/G-Develop/ChattyApp/master/docs/showing%20active%20users.png)
+![“users_can_chat_in real time  and a notification is displayed when the name changes"](https://raw.githubusercontent.com/G-Develop/ChattyApp/master/docs/ShowingNameChangeAndMessage.png)
 
 ## Dependencies
 * express
