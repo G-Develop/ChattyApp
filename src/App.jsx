@@ -29,7 +29,7 @@ class App extends Component {
           break;
         case 'incomingNotification':
           this.setState({
-            currentUser:data.userName,
+          /*  currentUser:data.userName,*/
             messages:this.state.messages.concat(data)
           })
           break;
@@ -53,9 +53,12 @@ class App extends Component {
       const notificationObj = {
         type: "postNotification",
         content: `${this.state.currentUser} changed their name to ${user}`,
-        userName:user
+        /*userName:user*/
       }
       this.socket.send(JSON.stringify(notificationObj));
+      this.setState({
+        currentUser: user
+      })
     }
   }
 
