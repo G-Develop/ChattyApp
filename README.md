@@ -1,45 +1,28 @@
-React Boilerplate
-=====================
+# Chatty App Project
 
-A minimal and light dev environment for ReactJS.
+Chatty, is simple version of slack and what's app where using web sockets users are able to send and recieve messages in real time. 
 
-### Usage
 
-Clone the boilerplate and create your own git repo.
+## Final Product
 
-```
-git clone git@github.com:lighthouse-labs/react-simple-boilerplate.git
-cd react-simple-boilerplate
-git remote rm origin
-git remote add origin [YOUR NEW REPOSITORY]
-# Manually update your package.json file
-```
+![“Screenshot when 2 user online”](showing active users.png)
+![“users_can_chat_in real time  and a notification is displayed when the name changes"](ShowingNameChangeAndMessage.png)
 
-Install the dependencies and start the server.
-
-```
-npm install
-npm start
-open http://localhost:3000
-```
-
-### Static Files
-
-You can store static files like images, fonts, etc in the `build` folder.
-
-For example, if you copy a file called my_image.png into the build folder you can access it using `http://localhost:3000/build/my_image.png`.
-
-### Linting
-
-This boilerplate project includes React ESLint configuration.
-
-```
-npm run lint
-```
-
-### Dependencies
-
+## Dependencies
+* express
+* uuid
+* ws
 * React
 * Webpack
 * [babel-loader](https://github.com/babel/babel-loader)
 * [webpack-dev-server](https://github.com/webpack/webpack-dev-server)
+
+## Getting Started
+
+- Install all dependencies (using the `npm install` command).
+- Run the development web server using the `npm start` command.
+
+## Functional
+- multiple users can post messages in real-time. 
+- users can change the default name to their name, and a notification will be sent  to all the connected users
+- the Navbar updates in real time  to reflect  the number of users connected
